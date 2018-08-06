@@ -26,13 +26,19 @@ struct Scanner {
 
   unsigned serialize(char *buffer) {
     unsigned i = 0;
+
     unsigned n = tags.size();
+    if (n > UINT8_MAX)
+      return 0;
     buffer[i++] = n;
+
     for (unsigned j = 0; j < n; j++) {
       Tag &tag = tags[j];
       buffer[i++] = static_cast<char>(tag.type);
       if (tag.type == CUSTOM) {
         unsigned name_length = tag.custom_tag_name.size();
+        if (name_length > UINT8_MAX)
+          return 0;
         buffer[i++] = name_length;
         tag.custom_tag_name.copy(&buffer[i], name_length);
         i += name_length;
