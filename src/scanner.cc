@@ -51,13 +51,13 @@ struct Scanner {
     tags.clear();
     if (length > 0) {
       unsigned i = 0;
-      unsigned n = buffer[i++];
+      unsigned n = (unsigned char)buffer[i++];
       tags.resize(n);
       for (unsigned j = 0; j < n; j++) {
         Tag &tag = tags[j];
         tag.type = static_cast<TagType>(buffer[i++]);
         if (tag.type == CUSTOM) {
-          unsigned name_length = buffer[i++];
+          unsigned name_length = (unsigned char)buffer[i++];
           tag.custom_tag_name.assign(&buffer[i], &buffer[i + name_length]);
           i += name_length;
         }
