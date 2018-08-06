@@ -34,10 +34,15 @@ struct Scanner {
 
     for (unsigned j = 0; j < n; j++) {
       Tag &tag = tags[j];
+      if (i >= TREE_SITTER_SERIALIZATION_BUFFER_SIZE)
+        return 0;
       buffer[i++] = static_cast<char>(tag.type);
+
       if (tag.type == CUSTOM) {
         unsigned name_length = tag.custom_tag_name.size();
         if (name_length > UINT8_MAX)
+          return 0;
+        if (i + name_length >= TREE_SITTER_SERIALIZATION_BUFFER_SIZE)
           return 0;
         buffer[i++] = name_length;
         tag.custom_tag_name.copy(&buffer[i], name_length);
