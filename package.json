@@ -2,7 +2,15 @@
   "name": "tree-sitter-html",
   "version": "0.15.0",
   "description": "HTML grammar for tree-sitter",
-  "main": "index.js",
+  "license": "MIT",
+  "homepage": "https://github.com/tree-sitter/tree-sitter-html",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/tree-sitter/tree-sitter-html.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tree-sitter/tree-sitter-html/issues"
+  },
   "keywords": [
     "parser",
     "lexer"
@@ -11,7 +19,7 @@
     "Max Brunsfeld <maxbrunsfeld@gmail.com>",
     "Ashi Krishnan <queerviolet@github.com>"
   ],
-  "license": "MIT",
+  "main": "index.js",
   "dependencies": {
     "nan": "^2.10.0"
   },
