@@ -16,11 +16,14 @@
     "nan": "^2.14.0"
   },
   "devDependencies": {
+    "npm-run-all": "^4.1.5",
     "tree-sitter-cli": "^0.16.9"
   },
   "scripts": {
-    "test": "tree-sitter test && tree-sitter parse examples/*.html --quiet --time",
-    "test-windows": "tree-sitter test"
+    "build": "tree-sitter generate",
+    "test": "npm-run-all -s build test:*",
+    "test:1": "tree-sitter test",
+    "test:2": "tree-sitter parse examples/*.html --quiet --time"
   },
   "tree-sitter": [
     {
