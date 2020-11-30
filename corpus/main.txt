@@ -90,6 +90,21 @@ Void tags at EOF
       (attribute (attribute_name) (quoted_attribute_value (attribute_value))))))
 
 ==================================
+Self-closing tags
+==================================
+<br/>
+<script/>
+<style/>
+---
+(fragment
+  (element (self_closing_tag (tag_name)))
+  (text)
+  (script_element (self_closing_script_tag (tag_name)))
+  (text)
+  (style_element (self_closing_style_tag (tag_name)))
+)
+
+==================================
 Custom tags
 ==================================
 <something:different>
