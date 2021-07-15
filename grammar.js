@@ -48,16 +48,22 @@ module.exports = grammar({
       $.self_closing_tag
     ),
 
-    script_element: $ => seq(
-      alias($.script_start_tag, $.start_tag),
-      optional($.raw_text),
-      $.end_tag
+    script_element: $ => choice(
+      seq(
+        alias($.script_start_tag, $.start_tag),
+        optional($.raw_text),
+        choice($.end_tag, $._implicit_end_tag)
+      ),
+      $.self_closing_script_tag
     ),
 
-    style_element: $ => seq(
-      alias($.style_start_tag, $.start_tag),
-      optional($.raw_text),
-      $.end_tag
+    style_element: $ => choice(
+      seq(
+        alias($.style_start_tag, $.start_tag),
+        optional($.raw_text),
+        choice($.end_tag, $._implicit_end_tag)
+      ),
+      $.self_closing_style_tag
     ),
 
     start_tag: $ => seq(
@@ -84,6 +90,20 @@ module.exports = grammar({
     self_closing_tag: $ => seq(
       '<',
       alias($._start_tag_name, $.tag_name),
+      repeat($.attribute),
+      '/>'
+    ),
+
+    self_closing_script_tag: $ => seq(
+      '<',
+      alias($._script_start_tag_name, $.tag_name),
+      repeat($.attribute),
+      '/>'
+    ),
+
+    self_closing_style_tag: $ => seq(
+      '<',
+      alias($._style_start_tag_name, $.tag_name),
       repeat($.attribute),
       '/>'
     ),
