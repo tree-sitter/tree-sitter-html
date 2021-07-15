@@ -1,8 +1,11 @@
 #include <string>
 #include <map>
+#include <regex>
 
 using std::string;
 using std::map;
+using std::regex;
+using std::regex_replace;
 
 enum TagType {
   AREA,
@@ -139,7 +142,17 @@ enum TagType {
 
 static const map<string, TagType> get_tag_map() {
   map<string, TagType> result;
+
 #define TAG(name) result[#name] = name
+
+// namespace tag: replace NAMESPACE_NAME with NAMESPACE:NAME
+// example: NST(XLINK_HREF); // xlink:href
+#define NST(name) { \
+  string n = #name; \
+  n = regex_replace(n, regex("_"), ":"); \
+  result[n] = name; \
+}
+
   TAG(AREA);
   TAG(BASE);
   TAG(BASEFONT);
@@ -266,6 +279,7 @@ static const map<string, TagType> get_tag_map() {
   TAG(VAR);
   TAG(VIDEO);
 #undef TAG
+#undef NST
   return result;
 }
 
