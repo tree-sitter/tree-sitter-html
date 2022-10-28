@@ -233,7 +233,9 @@ struct Scanner {
     lexer->advance(lexer, false);
     while (lexer->lookahead) {
       if (lexer->lookahead == ';') {
+        lexer->result_symbol = ENTITY;
         lexer->advance(lexer, false);
+        lexer->mark_end(lexer);
         return true;
       }
       else {
