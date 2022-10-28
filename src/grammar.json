@@ -47,6 +47,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "entity"
+        },
+        {
+          "type": "SYMBOL",
           "name": "text"
         },
         {
@@ -477,6 +481,10 @@
     {
       "type": "SYMBOL",
       "name": "_implicit_end_tag"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "entity"
     },
     {
       "type": "SYMBOL",

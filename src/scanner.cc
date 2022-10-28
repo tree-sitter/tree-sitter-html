@@ -19,6 +19,7 @@ enum TokenType {
   ERRONEOUS_END_TAG_NAME,
   SELF_CLOSING_TAG_DELIMITER,
   IMPLICIT_END_TAG,
+  ENTITY,
   RAW_TEXT,
   COMMENT
 };
@@ -228,6 +229,20 @@ struct Scanner {
     return false;
   }
 
+  bool scan_entity(TSLexer *lexer) {
+    lexer->advance(lexer, false);
+    while (lexer->lookahead) {
+      if (lexer->lookahead == ';') {
+        lexer->advance(lexer, false);
+        break;
+      }
+      else {
+        lexer->advance(lexer, false);
+      }
+    }
+    return false;
+  }
+
   bool scan(TSLexer *lexer, const bool *valid_symbols) {
     while (iswspace(lexer->lookahead)) {
       lexer->advance(lexer, true);
@@ -261,6 +276,12 @@ struct Scanner {
       case '/':
         if (valid_symbols[SELF_CLOSING_TAG_DELIMITER]) {
           return scan_self_closing_tag_delimiter(lexer);
+        }
+        break;
+
+      case '&':
+        if (valid_symbols[ENTITY]) {
+          return scan_entity(lexer);
         }
         break;
 

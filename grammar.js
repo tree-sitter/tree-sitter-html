@@ -14,6 +14,7 @@ module.exports = grammar({
     $.erroneous_end_tag_name,
     '/>',
     $._implicit_end_tag,
+    $.entity,
     $.raw_text,
     $.comment,
   ],
@@ -32,6 +33,7 @@ module.exports = grammar({
 
     _node: $ => choice(
       $.doctype,
+      $.entity,
       $.text,
       $.element,
       $.script_element,
