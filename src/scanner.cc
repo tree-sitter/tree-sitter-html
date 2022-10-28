@@ -238,8 +238,11 @@ struct Scanner {
         lexer->mark_end(lexer);
         return true;
       }
-      else {
+      else if (iswalnum(lexer->lookahead)) {
         lexer->advance(lexer, false);
+      }
+      else {
+        break;
       }
     }
     return false;
