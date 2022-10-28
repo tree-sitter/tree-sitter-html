@@ -234,7 +234,7 @@ struct Scanner {
     while (lexer->lookahead) {
       if (lexer->lookahead == ';') {
         lexer->advance(lexer, false);
-        break;
+        return true;
       }
       else {
         lexer->advance(lexer, false);
