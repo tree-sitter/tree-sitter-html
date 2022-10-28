@@ -122,6 +122,6 @@ module.exports = grammar({
       seq('"', optional(alias(/[^"]+/, $.attribute_value)), '"')
     ),
 
-    text: $ => /[^<>\s]([^<>]*[^<>\s])?/
+    text: $ => /[^<>&\s]([^<>&]*[^<>&\s])?/
   }
 });

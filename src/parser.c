@@ -413,6 +413,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
           lookahead == '\r' ||
           lookahead == ' ') ADVANCE(12);
       if (lookahead != 0 &&
+          lookahead != '&' &&
           lookahead != '<' &&
           lookahead != '>') ADVANCE(33);
       END_STATE();
@@ -432,6 +433,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
           lookahead == '\r' ||
           lookahead == ' ') SKIP(14)
       if (lookahead != 0 &&
+          lookahead != '&' &&
           lookahead != '>') ADVANCE(33);
       END_STATE();
     case 15:
@@ -538,6 +540,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
           lookahead == '\r' ||
           lookahead == ' ') ADVANCE(12);
       if (lookahead != 0 &&
+          lookahead != '&' &&
           lookahead != '<' &&
           lookahead != '>') ADVANCE(33);
       END_STATE();
