@@ -231,18 +231,49 @@ struct Scanner {
 
   bool scan_entity(TSLexer *lexer) {
     lexer->advance(lexer, false);
-    while (lexer->lookahead) {
-      if (lexer->lookahead == ';') {
-        lexer->result_symbol = ENTITY;
-        lexer->advance(lexer, false);
-        lexer->mark_end(lexer);
-        return true;
-      }
-      else if (iswalnum(lexer->lookahead)) {
+    if (lexer->lookahead == '#') {
+      // Unicode character point entity
+      lexer->advance(lexer, false);
+      
+      if (lexer->lookahead == 'x' || lexer->lookahead == 'X') {
+        // Hexadecimal
         lexer->advance(lexer, false);
       }
-      else {
-        break;
+      
+      unsigned digits = 0;
+      while (lexer->lookahead) {
+        if (digits > 0 && lexer->lookahead == ';') {
+          lexer->result_symbol = ENTITY;
+          lexer->advance(lexer, false);
+          lexer->mark_end(lexer);
+          return true;
+        }
+        else if (isdigit(lexer->lookahead)) {
+          lexer->advance(lexer, false);
+          digits++;
+        }
+        else {
+          break;
+        }
+      }
+    }
+    else {
+      // Named entity
+      unsigned chars = 0;
+      while (lexer->lookahead) {
+        if (chars > 0 && lexer->lookahead == ';') {
+          lexer->result_symbol = ENTITY;
+          lexer->advance(lexer, false);
+          lexer->mark_end(lexer);
+          return true;
+        }
+        else if (iswalnum(lexer->lookahead)) {
+          lexer->advance(lexer, false);
+          chars++;
+        }
+        else {
+          break;
+        }
       }
     }
     return false;
