@@ -310,3 +310,50 @@ TR, TD, and TH elements without end tags
       (element (start_tag (tag_name)) (text))
       (element (start_tag (tag_name)) (text)))
     (end_tag (tag_name))))
+
+==============================
+Named entities in tag contents
+==============================
+
+<p>Lorem ipsum &nbsp; dolor sit amet.</p>
+---
+
+(fragment
+  (element
+    (start_tag (tag_name))
+    (text)
+    (entity)
+    (text)
+    (end_tag (tag_name))))
+
+================================
+Numeric entities in tag contents
+================================
+
+<p>Lorem ipsum &#160; dolor sit amet.</p>
+---
+
+(fragment
+  (element
+    (start_tag (tag_name))
+    (text)
+    (entity)
+    (text)
+    (end_tag (tag_name))))
+
+====================================
+Hexadecimal entities in tag contents
+====================================
+
+<p>Lorem ipsum &#xA0; dolor &#xa0; sit amet.</p>
+---
+
+(fragment
+  (element
+    (start_tag (tag_name))
+    (text)
+    (entity)
+    (text)
+    (entity)
+    (text)
+    (end_tag (tag_name))))

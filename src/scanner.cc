@@ -24,6 +24,19 @@ enum TokenType {
   COMMENT
 };
 
+bool isHexDigit(char x) {
+  if (isdigit(x)) {
+    return true;
+  }
+  // https://github.com/tree-sitter/tree-sitter/issues/949 limits us to the
+  // functions defined in `exports.json` if we want to build a WASM version, or
+  // else this would use `isxdigit`.
+  int code = x;
+  if (code >= 97 && code <= 102) { return true; }
+  if (code >= 65 && code <= 70) { return true; }
+  return false;
+}
+
 struct Scanner {
   Scanner() {}
 
@@ -231,15 +244,17 @@ struct Scanner {
 
   bool scan_entity(TSLexer *lexer) {
     lexer->advance(lexer, false);
+    bool isHex = false;
     if (lexer->lookahead == '#') {
       // Unicode character point entity
       lexer->advance(lexer, false);
-      
+
       if (lexer->lookahead == 'x' || lexer->lookahead == 'X') {
         // Hexadecimal
+        isHex = true;
         lexer->advance(lexer, false);
       }
-      
+
       unsigned digits = 0;
       while (lexer->lookahead) {
         if (digits > 0 && lexer->lookahead == ';') {
@@ -248,7 +263,7 @@ struct Scanner {
           lexer->mark_end(lexer);
           return true;
         }
-        else if (isdigit(lexer->lookahead)) {
+        else if ((isHex && isHexDigit(lexer->lookahead)) || (!isHex && isdigit(lexer->lookahead))) {
           lexer->advance(lexer, false);
           digits++;
         }
