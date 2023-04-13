@@ -19,23 +19,9 @@ enum TokenType {
   ERRONEOUS_END_TAG_NAME,
   SELF_CLOSING_TAG_DELIMITER,
   IMPLICIT_END_TAG,
-  ENTITY,
   RAW_TEXT,
   COMMENT
 };
-
-bool isHexDigit(char x) {
-  if (isdigit(x)) {
-    return true;
-  }
-  // https://github.com/tree-sitter/tree-sitter/issues/949 limits us to the
-  // functions defined in `exports.json` if we want to build a WASM version, or
-  // else this would use `isxdigit`.
-  int code = x;
-  if (code >= 97 && code <= 102) { return true; }
-  if (code >= 65 && code <= 70) { return true; }
-  return false;
-}
 
 struct Scanner {
   Scanner() {}
@@ -242,58 +228,6 @@ struct Scanner {
     return false;
   }
 
-  bool scan_entity(TSLexer *lexer) {
-    lexer->advance(lexer, false);
-    bool isHex = false;
-    if (lexer->lookahead == '#') {
-      // Unicode character point entity
-      lexer->advance(lexer, false);
-
-      if (lexer->lookahead == 'x' || lexer->lookahead == 'X') {
-        // Hexadecimal
-        isHex = true;
-        lexer->advance(lexer, false);
-      }
-
-      unsigned digits = 0;
-      while (lexer->lookahead) {
-        if (digits > 0 && lexer->lookahead == ';') {
-          lexer->result_symbol = ENTITY;
-          lexer->advance(lexer, false);
-          lexer->mark_end(lexer);
-          return true;
-        }
-        else if ((isHex && isHexDigit(lexer->lookahead)) || (!isHex && isdigit(lexer->lookahead))) {
-          lexer->advance(lexer, false);
-          digits++;
-        }
-        else {
-          break;
-        }
-      }
-    }
-    else {
-      // Named entity
-      unsigned chars = 0;
-      while (lexer->lookahead) {
-        if (chars > 0 && lexer->lookahead == ';') {
-          lexer->result_symbol = ENTITY;
-          lexer->advance(lexer, false);
-          lexer->mark_end(lexer);
-          return true;
-        }
-        else if (iswalnum(lexer->lookahead)) {
-          lexer->advance(lexer, false);
-          chars++;
-        }
-        else {
-          break;
-        }
-      }
-    }
-    return false;
-  }
-
   bool scan(TSLexer *lexer, const bool *valid_symbols) {
     while (iswspace(lexer->lookahead)) {
       lexer->advance(lexer, true);
@@ -327,12 +261,6 @@ struct Scanner {
       case '/':
         if (valid_symbols[SELF_CLOSING_TAG_DELIMITER]) {
           return scan_self_closing_tag_delimiter(lexer);
-        }
-        break;
-
-      case '&':
-        if (valid_symbols[ENTITY]) {
-          return scan_entity(lexer);
         }
         break;
 
