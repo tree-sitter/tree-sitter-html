@@ -9,4 +9,5 @@
   "<"
   ">"
   "</"
+  "/>"
 ] @punctuation.bracket
