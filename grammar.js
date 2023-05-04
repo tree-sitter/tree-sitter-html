@@ -32,6 +32,7 @@ module.exports = grammar({
 
     _node: $ => choice(
       $.doctype,
+      $.entity,
       $.text,
       $.element,
       $.script_element,
@@ -115,11 +116,16 @@ module.exports = grammar({
 
     attribute_value: $ => /[^<>"'=\s]+/,
 
+    // An entity can be named, numeric (decimal), or numeric (hexacecimal). The
+    // longest entity name is 29 characters long, and the HTML spec says that
+    // no more will ever be added.
+    entity: $ => /&(#([xX][0-9a-fA-F]{1,6}|[0-9]{1,5})|[A-Za-z]{1,30});/,
+
     quoted_attribute_value: $ => choice(
       seq("'", optional(alias(/[^']+/, $.attribute_value)), "'"),
       seq('"', optional(alias(/[^"]+/, $.attribute_value)), '"')
     ),
 
-    text: $ => /[^<>\s]([^<>]*[^<>\s])?/
+    text: $ => /[^<>&\s]([^<>&]*[^<>&\s])?/
   }
 });
