@@ -4,6 +4,8 @@
 #include <string>
 #include <cwctype>
 #include <cstring>
+#include <stdint.h>
+
 #include "tag.h"
 
 namespace {
