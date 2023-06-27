@@ -26,10 +26,12 @@ typedef struct {
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 #define VEC_RESIZE(vec, _cap)                                                  \
-    void *tmp = realloc((vec).data, (_cap) * sizeof((vec).data[0]));           \
-    assert(tmp != NULL);                                                       \
-    (vec).data = tmp;                                                          \
-    (vec).cap = (_cap);
+    if ((_cap) > (vec).cap && (_cap) > 0) {                                    \
+        void *tmp = realloc((vec).data, (_cap) * sizeof((vec).data[0]));       \
+        assert(tmp != NULL);                                                   \
+        (vec).data = tmp;                                                      \
+        (vec).cap = (_cap);                                                    \
+    }
 
 #define VEC_GROW(vec, _cap)                                                    \
     if ((vec).cap < (_cap)) {                                                  \
@@ -60,7 +62,9 @@ typedef struct {
 #define VEC_CLEAR(vec)                                                         \
     {                                                                          \
         for (int i = 0; i < (vec).len; i++) {                                  \
-            STRING_FREE((vec).data[i].custom_tag_name);                        \
+            if ((vec).data[i].type == CUSTOM) {                                \
+                STRING_FREE((vec).data[i].custom_tag_name);                    \
+            }                                                                  \
         }                                                                      \
         (vec).len = 0;                                                         \
     }
@@ -126,7 +130,7 @@ unsigned serialize(Scanner *scanner, char *buffer) {
             }
             buffer[size++] = (char)tag.type;
             buffer[size++] = (char)name_length;
-            memcpy(&buffer[size], tag.custom_tag_name.data, name_length);
+            strncpy(&buffer[size], tag.custom_tag_name.data, name_length);
             size += name_length;
         } else {
             if (size + 1 >= TREE_SITTER_SERIALIZATION_BUFFER_SIZE) {
@@ -141,8 +145,8 @@ unsigned serialize(Scanner *scanner, char *buffer) {
 }
 
 void deserialize(Scanner *scanner, const char *buffer, unsigned length) {
+    VEC_CLEAR(scanner->tags);
     if (length > 0) {
-        VEC_CLEAR(scanner->tags);
         unsigned size = 0;
         uint16_t tag_count = 0;
         uint16_t serialized_tag_count = 0;
@@ -154,10 +158,11 @@ void deserialize(Scanner *scanner, const char *buffer, unsigned length) {
         memcpy(&tag_count, &buffer[size], sizeof(tag_count));
         size += sizeof(tag_count);
 
+        VEC_RESIZE(scanner->tags, tag_count);
         if (tag_count > 0) {
-            VEC_RESIZE(scanner->tags, tag_count);
-            for (unsigned j = 0; j < serialized_tag_count; j++) {
-                Tag tag = new_tag();
+            unsigned iter = 0;
+            for (iter = 0; iter < serialized_tag_count; iter++) {
+                Tag tag = scanner->tags.data[iter];
                 tag.type = (TagType)buffer[size++];
                 if (tag.type == CUSTOM) {
                     uint16_t name_length = (uint8_t)buffer[size++];
@@ -165,10 +170,16 @@ void deserialize(Scanner *scanner, const char *buffer, unsigned length) {
                     tag.custom_tag_name.cap = name_length;
                     tag.custom_tag_name.data =
                         (char *)calloc(1, sizeof(char) * (name_length + 1));
-                    memcpy(tag.custom_tag_name.data, &buffer[size],
-                           name_length);
+                    strncpy(tag.custom_tag_name.data, &buffer[size],
+                            name_length);
                     size += name_length;
                 }
+                VEC_PUSH(scanner->tags, tag);
+            }
+            // add zero tags if we didn't read enough, this is because the
+            // buffer had no more room but we held more tags.
+            for (; iter < tag_count; iter++) {
+                Tag tag = new_tag();
                 VEC_PUSH(scanner->tags, tag);
             }
         }
