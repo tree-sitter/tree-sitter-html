@@ -10,3 +10,4 @@ Cargo.lock
 *.o
 bindings/c/*.h
 bindings/c/*.pc
+.build/
