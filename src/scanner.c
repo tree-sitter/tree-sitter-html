@@ -46,7 +46,9 @@ typedef struct {
 
 #define VEC_POP(vec)                                                           \
     {                                                                          \
-        STRING_FREE(VEC_BACK(vec).custom_tag_name);                            \
+        if (VEC_BACK(vec).type == CUSTOM) {                                    \
+            tag_free(&VEC_BACK(vec));                                          \
+        }                                                                      \
         (vec).len--;                                                           \
     }
 
@@ -62,9 +64,7 @@ typedef struct {
 #define VEC_CLEAR(vec)                                                         \
     {                                                                          \
         for (int i = 0; i < (vec).len; i++) {                                  \
-            if ((vec).data[i].type == CUSTOM) {                                \
-                STRING_FREE((vec).data[i].custom_tag_name);                    \
-            }                                                                  \
+            tag_free(&(vec).data[i]);                                          \
         }                                                                      \
         (vec).len = 0;                                                         \
     }
@@ -320,8 +320,6 @@ bool scan_start_tag_name(Scanner *scanner, TSLexer *lexer) {
         return false;
     }
     Tag tag = for_name(tag_name.data);
-    if (tag.type == CUSTOM) {
-    }
     VEC_PUSH(scanner->tags, tag);
     switch (tag.type) {
         case SCRIPT:
