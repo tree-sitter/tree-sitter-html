@@ -108,7 +108,7 @@ typedef struct {
         memset((vec).data, 0, (vec).cap * sizeof(char));                       \
     }
 
-unsigned serialize(Scanner *scanner, char *buffer) {
+static unsigned serialize(Scanner *scanner, char *buffer) {
     uint16_t tag_count =
         scanner->tags.len > UINT16_MAX ? UINT16_MAX : scanner->tags.len;
     uint16_t serialized_tag_count = 0;
@@ -144,7 +144,7 @@ unsigned serialize(Scanner *scanner, char *buffer) {
     return size;
 }
 
-void deserialize(Scanner *scanner, const char *buffer, unsigned length) {
+static void deserialize(Scanner *scanner, const char *buffer, unsigned length) {
     VEC_CLEAR(scanner->tags);
     if (length > 0) {
         unsigned size = 0;
@@ -186,7 +186,7 @@ void deserialize(Scanner *scanner, const char *buffer, unsigned length) {
     }
 }
 
-String scan_tag_name(TSLexer *lexer) {
+static String scan_tag_name(TSLexer *lexer) {
     String tag_name;
     STRING_INIT(tag_name);
     while (iswalnum(lexer->lookahead) || lexer->lookahead == '-' ||
@@ -197,7 +197,7 @@ String scan_tag_name(TSLexer *lexer) {
     return tag_name;
 }
 
-bool scan_comment(TSLexer *lexer) {
+static bool scan_comment(TSLexer *lexer) {
     if (lexer->lookahead != '-') {
         return false;
     }
@@ -228,7 +228,7 @@ bool scan_comment(TSLexer *lexer) {
     return false;
 }
 
-bool scan_raw_text(Scanner *scanner, TSLexer *lexer) {
+static bool scan_raw_text(Scanner *scanner, TSLexer *lexer) {
     if (scanner->tags.len == 0) {
         return false;
     }
@@ -257,7 +257,7 @@ bool scan_raw_text(Scanner *scanner, TSLexer *lexer) {
     return true;
 }
 
-bool scan_implicit_end_tag(Scanner *scanner, TSLexer *lexer) {
+static bool scan_implicit_end_tag(Scanner *scanner, TSLexer *lexer) {
     Tag *parent = scanner->tags.len == 0 ? NULL : &VEC_BACK(scanner->tags);
 
     bool is_closing_tag = false;
@@ -313,7 +313,7 @@ bool scan_implicit_end_tag(Scanner *scanner, TSLexer *lexer) {
     return false;
 }
 
-bool scan_start_tag_name(Scanner *scanner, TSLexer *lexer) {
+static bool scan_start_tag_name(Scanner *scanner, TSLexer *lexer) {
     String tag_name = scan_tag_name(lexer);
     if (tag_name.len == 0) {
         STRING_FREE(tag_name);
@@ -336,7 +336,7 @@ bool scan_start_tag_name(Scanner *scanner, TSLexer *lexer) {
     return true;
 }
 
-bool scan_end_tag_name(Scanner *scanner, TSLexer *lexer) {
+static bool scan_end_tag_name(Scanner *scanner, TSLexer *lexer) {
     String tag_name = scan_tag_name(lexer);
     if (tag_name.len == 0) {
         STRING_FREE(tag_name);
@@ -354,7 +354,7 @@ bool scan_end_tag_name(Scanner *scanner, TSLexer *lexer) {
     return true;
 }
 
-bool scan_self_closing_tag_delimiter(Scanner *scanner, TSLexer *lexer) {
+static bool scan_self_closing_tag_delimiter(Scanner *scanner, TSLexer *lexer) {
     lexer->advance(lexer, false);
     if (lexer->lookahead == '>') {
         lexer->advance(lexer, false);
@@ -367,7 +367,7 @@ bool scan_self_closing_tag_delimiter(Scanner *scanner, TSLexer *lexer) {
     return false;
 }
 
-bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
+static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
     while (iswspace(lexer->lookahead)) {
         lexer->advance(lexer, true);
     }
