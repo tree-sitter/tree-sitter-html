@@ -1,4 +1,5 @@
 #include "tag.h"
+
 #include <wctype.h>
 
 enum TokenType {
