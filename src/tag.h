@@ -1,4 +1,5 @@
 #include "tree_sitter/parser.h"
+
 #include <assert.h>
 #include <string.h>
 
@@ -288,7 +289,7 @@ static const TagType TAG_TYPES_NOT_ALLOWED_IN_PARAGRAPHS[] = {
     NAV,      OL,         P,      PRE,        SECTION,
 };
 
-TagType get_tag_from_string(const char *tag_name) {
+static TagType get_tag_from_string(const char *tag_name) {
     for (int i = 0; i < 126; i++) {
         if (strcmp(TAG_TYPES_BY_TAG_NAME[i].tag_name, tag_name) == 0) {
             return TAG_TYPES_BY_TAG_NAME[i].tag_value;
@@ -306,7 +307,7 @@ static inline Tag new_tag() {
     return tag;
 }
 
-Tag make_tag(TagType type, const char *name) {
+static Tag make_tag(TagType type, const char *name) {
     Tag tag = new_tag();
     tag.type = type;
     if (type == CUSTOM) {
@@ -340,7 +341,7 @@ static inline bool tagcmp(const Tag *_tag1, const Tag *_tag2) {
                                   : true);
 }
 
-bool can_contain(Tag *self, const Tag *other) {
+static bool can_contain(Tag *self, const Tag *other) {
     TagType child = other->type;
 
     switch (self->type) {
