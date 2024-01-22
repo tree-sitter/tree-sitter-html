@@ -311,7 +311,7 @@ static Tag make_tag(TagType type, const char *name) {
     Tag tag = new_tag();
     tag.type = type;
     if (type == CUSTOM) {
-        tag.custom_tag_name.len = strlen(name);
+        tag.custom_tag_name.len = (uint32_t)strlen(name);
         tag.custom_tag_name.data =
             (char *)calloc(1, sizeof(char) * (tag.custom_tag_name.len + 1));
         strncpy(tag.custom_tag_name.data, name, tag.custom_tag_name.len);
