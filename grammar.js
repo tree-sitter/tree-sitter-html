@@ -31,7 +31,7 @@ module.exports = grammar({
   ],
 
   rules: {
-    fragment: $ => repeat($._node),
+    document: $ => repeat($._node),
 
     doctype: $ => seq(
       '<!',

@@ -4,7 +4,7 @@ Tags
 <span>Hello</span>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (text)
@@ -16,7 +16,7 @@ Tags with attributes
 <input value=yes class="a" data-💩></input>
 ---
 
-(fragment
+(document
   (element
     (start_tag
       (tag_name)
@@ -42,7 +42,7 @@ Nested tags
 </div>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (element
@@ -63,7 +63,7 @@ Void tags
 <form><img src="something.png"><br><input type=submit value=Ok /></form>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (element
@@ -84,7 +84,7 @@ Void tags at EOF
 <img src="something.png">
 ---
 
-(fragment
+(document
   (element
     (start_tag
       (tag_name)
@@ -100,7 +100,7 @@ Custom tags
 </something:different>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (element
@@ -119,7 +119,7 @@ Comments
 </div>
 ---
 
-(fragment
+(document
   (comment)
   (comment)
   (element
@@ -147,7 +147,7 @@ Raw text elements
 
 ---
 
-(fragment
+(document
   (script_element
     (start_tag (tag_name))
     (raw_text)
@@ -169,7 +169,7 @@ All-caps doctype
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 ---
 
-(fragment
+(document
   (doctype))
 
 ==================================
@@ -178,7 +178,7 @@ Lowercase doctype
 <!doctype html>
 ---
 
-(fragment
+(document
   (doctype))
 
 ==================================
@@ -190,7 +190,7 @@ LI elements without close tags
 </ul>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (element (start_tag (tag_name)) (text))
@@ -209,7 +209,7 @@ DT and DL elements without close tags
 </dl>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (element (start_tag (tag_name)) (text))
@@ -229,7 +229,7 @@ P elements without close tags
 <h1>Five</h1>
 ---
 
-(fragment
+(document
   (element (start_tag (tag_name)) (text))
   (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
   (element (start_tag (tag_name)) (text))
@@ -242,7 +242,7 @@ Ruby annotation elements without close tags
 <ruby>東<rb>京<rt>とう<rt>きょう</ruby>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (text)
@@ -266,7 +266,7 @@ COLGROUP elements without end tags
 </table>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (element
@@ -298,7 +298,7 @@ TR, TD, and TH elements without end tags
 </table>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (element
@@ -318,7 +318,7 @@ Named entities in tag contents
 <p>Lorem ipsum &nbsp; dolor sit &copy; amet.</p>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (text)
@@ -335,7 +335,7 @@ Numeric entities in tag contents
 <p>Lorem ipsum &#160; dolor sit &#8212; amet.</p>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (text)
@@ -352,7 +352,7 @@ Multiple entities in tag contents
 <p>Lorem ipsum &#xA0; dolor &#xa0; sit &nbsp; amet.</p>
 ---
 
-(fragment
+(document
   (element
     (start_tag (tag_name))
     (text)
