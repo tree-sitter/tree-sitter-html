@@ -1,4 +1,4 @@
-VERSION := 0.20.0
+VERSION := 0.20.1
 
 # Repository
 SRC_DIR := src
