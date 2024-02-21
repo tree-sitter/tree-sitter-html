@@ -37,7 +37,7 @@
   },
   "tree-sitter": [
     {
-      "scope": "text.html.basic",
+      "scope": "source.html",
       "file-types": [
         "html"
       ],
@@ -47,6 +47,9 @@
       ],
       "injections": [
         "queries/injections.scm"
+      ],
+      "external-files": [
+        "src/tag.h"
       ]
     }
   ]

@@ -363,3 +363,20 @@ Multiple entities in tag contents
     (entity)
     (text)
     (end_tag (tag_name))))
+
+==================================
+Omitted end tags for html and head
+==================================
+
+<!doctype html><html><head>
+
+---
+
+(document
+  (doctype)
+  (element
+    (start_tag
+      (tag_name))
+    (element
+      (start_tag
+        (tag_name)))))
