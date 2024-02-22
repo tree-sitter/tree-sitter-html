@@ -1,4 +1,4 @@
-#include "tree_sitter/parser.h"
+#include "tree_sitter/array.h"
 
 #include <assert.h>
 #include <string.h>
@@ -137,11 +137,7 @@ typedef enum {
     END_,
 } TagType;
 
-typedef struct {
-    uint32_t len;
-    uint32_t cap;
-    char *data;
-} String;
+typedef Array(char) String;
 
 typedef struct {
     char tag_name[16];
@@ -283,61 +279,50 @@ const TagMap TAG_TYPES_BY_TAG_NAME[126] = {
 };
 
 static const TagType TAG_TYPES_NOT_ALLOWED_IN_PARAGRAPHS[] = {
-    ADDRESS,  ARTICLE,    ASIDE,  BLOCKQUOTE, DETAILS, DIV, DL,
-    FIELDSET, FIGCAPTION, FIGURE, FOOTER,     FORM,    H1,  H2,
-    H3,       H4,         H5,     H6,         HEADER,  HR,  MAIN,
-    NAV,      OL,         P,      PRE,        SECTION,
+    ADDRESS, ARTICLE, ASIDE, BLOCKQUOTE, DETAILS, DIV,    DL, FIELDSET, FIGCAPTION, FIGURE, FOOTER, FORM, H1,
+    H2,      H3,      H4,    H5,         H6,      HEADER, HR, MAIN,     NAV,        OL,     P,      PRE,  SECTION,
 };
 
-static TagType get_tag_from_string(const char *tag_name) {
+static TagType get_tag_from_string(String tag_name) {
     for (int i = 0; i < 126; i++) {
-        if (strcmp(TAG_TYPES_BY_TAG_NAME[i].tag_name, tag_name) == 0) {
+        if (strcmp(TAG_TYPES_BY_TAG_NAME[i].tag_name, tag_name.contents) == 0) {
             return TAG_TYPES_BY_TAG_NAME[i].tag_value;
         }
     }
     return CUSTOM;
 }
 
-static inline Tag new_tag() {
+static inline Tag tag_new() {
     Tag tag;
     tag.type = END_;
-    tag.custom_tag_name.data = NULL;
-    tag.custom_tag_name.len = 0;
-    tag.custom_tag_name.cap = 0;
+    array_init(&tag.custom_tag_name);
     return tag;
 }
 
-static Tag make_tag(TagType type, const char *name) {
-    Tag tag = new_tag();
+static Tag make_tag(TagType type, String name) {
+    Tag tag = tag_new();
     tag.type = type;
     if (type == CUSTOM) {
-        tag.custom_tag_name.len = (uint32_t)strlen(name);
-        tag.custom_tag_name.data =
-            (char *)calloc(1, sizeof(char) * (tag.custom_tag_name.len + 1));
-        strncpy(tag.custom_tag_name.data, name, tag.custom_tag_name.len);
+        array_reserve(&tag.custom_tag_name, name.size + 1);
+        array_extend(&tag.custom_tag_name, name.size, name.contents);
+        tag.custom_tag_name.size = name.size;
     }
     return tag;
 }
 
-static inline void tag_free(Tag *tag) {
+static void tag_delete(Tag *tag) {
     if (tag->type == CUSTOM) {
-        free(tag->custom_tag_name.data);
+        array_delete(&tag->custom_tag_name);
     }
-    tag->custom_tag_name.data = NULL;
 }
 
-static inline bool is_void(const Tag *tag) {
-    return tag->type < END_OF_VOID_TAGS;
-}
+static inline bool is_void(const Tag *tag) { return tag->type < END_OF_VOID_TAGS; }
 
-static inline Tag for_name(const char *name) {
-    return make_tag(get_tag_from_string(name), name);
-}
+static inline Tag for_name(String name) { return make_tag(get_tag_from_string(name), name); }
 
 static inline bool tagcmp(const Tag *_tag1, const Tag *_tag2) {
     return _tag1->type == _tag2->type &&
-           (_tag1->type == CUSTOM ? strcmp(_tag1->custom_tag_name.data,
-                                           _tag2->custom_tag_name.data) == 0
+           (_tag1->type == CUSTOM ? strcmp(_tag1->custom_tag_name.contents, _tag2->custom_tag_name.contents) == 0
                                   : true);
 }
 
