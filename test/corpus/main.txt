@@ -50,6 +50,7 @@ Nested tags
   (element
     (start_tag
       (tag_name))
+    (text)
     (element
       (start_tag
         (tag_name))
@@ -128,6 +129,7 @@ Custom tags
   (element
     (start_tag
       (tag_name))
+    (text)
     (element
       (start_tag
         (tag_name)
@@ -136,6 +138,7 @@ Custom tags
       (text)
       (end_tag
         (tag_name)))
+    (text)
     (end_tag
       (tag_name))))
 
@@ -152,10 +155,12 @@ Comments
 (document
   (comment)
   (comment)
+  (text)
   (element
     (start_tag
       (tag_name))
     (comment)
+    (text)
     (end_tag
       (tag_name))))
 
@@ -186,18 +191,21 @@ Raw text elements
     (raw_text)
     (end_tag
       (tag_name)))
+  (text)
   (style_element
     (start_tag
       (tag_name))
     (raw_text)
     (end_tag
       (tag_name)))
+  (text)
   (script_element
     (start_tag
       (tag_name))
     (raw_text)
     (end_tag
-      (tag_name))))
+      (tag_name)))
+  (text))
 
 ==================================
 All-caps doctype
@@ -232,6 +240,7 @@ LI elements without close tags
   (element
     (start_tag
       (tag_name))
+    (text)
     (element
       (start_tag
         (tag_name))
@@ -259,6 +268,7 @@ DT and DL elements without close tags
   (element
     (start_tag
       (tag_name))
+    (text)
     (element
       (start_tag
         (tag_name))
@@ -303,6 +313,7 @@ P elements without close tags
     (text)
     (end_tag
       (tag_name)))
+  (text)
   (element
     (start_tag
       (tag_name))
@@ -363,9 +374,11 @@ COLGROUP elements without end tags
   (element
     (start_tag
       (tag_name))
+    (text)
     (element
       (start_tag
         (tag_name))
+      (text)
       (element
         (start_tag
           (tag_name)
@@ -383,26 +396,31 @@ COLGROUP elements without end tags
     (element
       (start_tag
         (tag_name))
+      (text)
       (element
         (start_tag
           (tag_name))
         (text)
         (end_tag
           (tag_name)))
+      (text)
       (element
         (start_tag
           (tag_name))
         (text)
         (end_tag
           (tag_name)))
+      (text)
       (element
         (start_tag
           (tag_name))
         (text)
         (end_tag
           (tag_name)))
+      (text)
       (end_tag
         (tag_name)))
+    (text)
     (end_tag
       (tag_name))))
 
@@ -423,9 +441,11 @@ TR, TD, and TH elements without end tags
   (element
     (start_tag
       (tag_name))
+    (text)
     (element
       (start_tag
         (tag_name))
+      (text)
       (element
         (start_tag
           (tag_name))
@@ -437,6 +457,7 @@ TR, TD, and TH elements without end tags
     (element
       (start_tag
         (tag_name))
+      (text)
       (element
         (start_tag
           (tag_name))
@@ -456,6 +477,7 @@ Named entities in tag contents
 ---
 
 (document
+  (text)
   (element
     (start_tag
       (tag_name))
@@ -475,6 +497,7 @@ Numeric entities in tag contents
 ---
 
 (document
+  (text)
   (element
     (start_tag
       (tag_name))
@@ -494,6 +517,7 @@ Multiple entities in tag contents
 ---
 
 (document
+  (text)
   (element
     (start_tag
       (tag_name))
@@ -516,6 +540,7 @@ Omitted end tags for html and head
 ---
 
 (document
+  (text)
   (doctype)
   (element
     (start_tag

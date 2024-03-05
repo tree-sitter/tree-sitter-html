@@ -138,6 +138,6 @@ module.exports = grammar({
       seq('"', optional(alias(/[^"]+/, $.attribute_value)), '"'),
     ),
 
-    text: _ => /[^<>&\s]([^<>&]*[^<>&\s])?/,
+    text: _ => /[^<>&]+/,
   },
 });
