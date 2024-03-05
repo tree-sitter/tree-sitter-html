@@ -117,26 +117,28 @@ module.exports = grammar({
       $.attribute_name,
       optional(seq(
         '=',
-        choice(
-          $.attribute_value,
-          $.quoted_attribute_value,
-        ),
+        $._attribute_value,
       )),
     ),
 
     attribute_name: _ => /[^<>"'/=\s]+/,
-
-    attribute_value: _ => /[^<>"'=\s]+/,
 
     // An entity can be named, numeric (decimal), or numeric (hexacecimal). The
     // longest entity name is 29 characters long, and the HTML spec says that
     // no more will ever be added.
     entity: _ => /&(#([xX][0-9a-fA-F]{1,6}|[0-9]{1,5})|[A-Za-z]{1,30});?/,
 
-    quoted_attribute_value: $ => choice(
-      seq('\'', optional(alias(/[^']+/, $.attribute_value)), '\''),
-      seq('"', optional(alias(/[^"]+/, $.attribute_value)), '"'),
+    _attribute_value: $ => choice(
+      $.doublequoted_attribute_value,
+      $.singlequoted_attribute_value,
+      $.unquoted_attribute_value,
     ),
+
+    doublequoted_attribute_value: $ => seq('"', /[^"]*/, '"'),
+
+    singlequoted_attribute_value: $ => seq('\'', /[^']*/, '\''),
+
+    unquoted_attribute_value: $ => /[^"'>\s][^>\s]*/,
 
     text: _ => /[^<>&\s]([^<>&]*[^<>&\s])?/,
   },

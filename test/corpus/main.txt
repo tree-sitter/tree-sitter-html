@@ -24,11 +24,10 @@ Tags with attributes
       (tag_name)
       (attribute
         (attribute_name)
-        (attribute_value))
+        (unquoted_attribute_value))
       (attribute
         (attribute_name)
-        (quoted_attribute_value
-          (attribute_value)))
+        (doublequoted_attribute_value))
       (attribute
         (attribute_name)))
     (end_tag
@@ -82,8 +81,7 @@ Void tags
         (tag_name)
         (attribute
           (attribute_name)
-          (quoted_attribute_value
-            (attribute_value)))))
+          (doublequoted_attribute_value))))
     (element
       (start_tag
         (tag_name)))
@@ -92,10 +90,10 @@ Void tags
         (tag_name)
         (attribute
           (attribute_name)
-          (attribute_value))
+          (unquoted_attribute_value))
         (attribute
           (attribute_name)
-          (attribute_value))))
+          (unquoted_attribute_value))))
     (end_tag
       (tag_name))))
 
@@ -111,8 +109,7 @@ Void tags at EOF
       (tag_name)
       (attribute
         (attribute_name)
-        (quoted_attribute_value
-          (attribute_value))))))
+        (doublequoted_attribute_value)))))
 
 ==================================
 Custom tags
@@ -371,15 +368,13 @@ COLGROUP elements without end tags
           (tag_name)
           (attribute
             (attribute_name)
-            (quoted_attribute_value
-              (attribute_value)))))
+            (doublequoted_attribute_value))))
       (element
         (start_tag
           (tag_name)
           (attribute
             (attribute_name)
-            (quoted_attribute_value
-              (attribute_value))))))
+            (doublequoted_attribute_value)))))
     (element
       (start_tag
         (tag_name))
