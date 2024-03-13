@@ -153,7 +153,7 @@ typedef struct {
     String custom_tag_name;
 } Tag;
 
-const TagMap TAG_TYPES_BY_TAG_NAME[126] = {
+static const TagMap TAG_TYPES_BY_TAG_NAME[126] = {
     {"AREA",       AREA      },
     {"BASE",       BASE      },
     {"BASEFONT",   BASEFONT  },
