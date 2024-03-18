@@ -141,15 +141,15 @@ typedef Array(char) String;
 
 typedef struct {
     char tag_name[16];
-    TagType tag_value;
-} TagMap;
+    TagType tag_type;
+} TagMapEntry;
 
 typedef struct {
     TagType type;
     String custom_tag_name;
 } Tag;
 
-static const TagMap TAG_TYPES_BY_TAG_NAME[126] = {
+static const TagMapEntry TAG_TYPES_BY_TAG_NAME[126] = {
     {"AREA",       AREA      },
     {"BASE",       BASE      },
     {"BASEFONT",   BASEFONT  },
@@ -287,12 +287,12 @@ static const TagType TAG_TYPES_NOT_ALLOWED_IN_PARAGRAPHS[] = {
 
 static TagType tag_type_for_name(const String *tag_name) {
     for (int i = 0; i < 126; i++) {
-        const char *name = TAG_TYPES_BY_TAG_NAME[i].tag_name;
+        const TagMapEntry *entry = &TAG_TYPES_BY_TAG_NAME[i];
         if (
-            strlen(name) == tag_name->size &&
-            strncmp(tag_name->contents, TAG_TYPES_BY_TAG_NAME[i].tag_name, tag_name->size) == 0
+            strlen(entry->tag_name) == tag_name->size &&
+            memcmp(tag_name->contents, entry->tag_name, tag_name->size) == 0
         ) {
-            return TAG_TYPES_BY_TAG_NAME[i].tag_value;
+            return entry->tag_type;
         }
     }
     return CUSTOM;
