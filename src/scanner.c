@@ -166,7 +166,7 @@ static void deserialize(Scanner *scanner, const char *buffer, unsigned length) {
         if (tag_count > 0) {
             unsigned iter = 0;
             for (iter = 0; iter < serialized_tag_count; iter++) {
-                Tag tag = scanner->tags.data[iter];
+                Tag tag = new_tag();
                 tag.type = (TagType)buffer[size++];
                 if (tag.type == CUSTOM) {
                     uint16_t name_length = (uint8_t)buffer[size++];
