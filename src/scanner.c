@@ -1,6 +1,6 @@
-#include <wctype.h>
-#include "tree_sitter/array.h"
 #include "tag.h"
+#include "tree_sitter/array.h"
+#include <wctype.h>
 
 enum TokenType {
     START_TAG_NAME,
@@ -219,7 +219,7 @@ static bool scan_implicit_end_tag(Scanner *scanner, TSLexer *lexer) {
         parent &&
         (
             !tag_can_contain(parent, &next_tag) ||
-            (parent->type == HTML || parent->type == HEAD || parent->type == BODY) && lexer->eof(lexer)
+            ((parent->type == HTML || parent->type == HEAD || parent->type == BODY) && lexer->eof(lexer))
         )
     ) {
         pop_tag(scanner);
