@@ -170,6 +170,11 @@ static bool scan_raw_text(Scanner *scanner, TSLexer *lexer) {
     return true;
 }
 
+static void pop_tag(Scanner *scanner) {
+    Tag popped_tag = array_pop(&scanner->tags);
+    tag_free(&popped_tag);
+}
+
 static bool scan_implicit_end_tag(Scanner *scanner, TSLexer *lexer) {
     Tag *parent = scanner->tags.size == 0 ? NULL : array_back(&scanner->tags);
 
@@ -179,7 +184,7 @@ static bool scan_implicit_end_tag(Scanner *scanner, TSLexer *lexer) {
         advance(lexer);
     } else {
         if (parent && tag_is_void(parent)) {
-            array_pop(&scanner->tags);
+            pop_tag(scanner);
             lexer->result_symbol = IMPLICIT_END_TAG;
             return true;
         }
@@ -204,8 +209,7 @@ static bool scan_implicit_end_tag(Scanner *scanner, TSLexer *lexer) {
         // the case of malformed HTML)
         for (unsigned i = scanner->tags.size; i > 0; i--) {
             if (scanner->tags.contents[i - 1].type == next_tag.type) {
-                Tag popped_tag = array_pop(&scanner->tags);
-                tag_free(&popped_tag);
+                pop_tag(scanner);
                 lexer->result_symbol = IMPLICIT_END_TAG;
                 tag_free(&next_tag);
                 return true;
@@ -218,8 +222,7 @@ static bool scan_implicit_end_tag(Scanner *scanner, TSLexer *lexer) {
             (parent->type == HTML || parent->type == HEAD || parent->type == BODY) && lexer->eof(lexer)
         )
     ) {
-        Tag popped_tag = array_pop(&scanner->tags);
-        tag_free(&popped_tag);
+        pop_tag(scanner);
         lexer->result_symbol = IMPLICIT_END_TAG;
         tag_free(&next_tag);
         return true;
@@ -262,8 +265,7 @@ static bool scan_end_tag_name(Scanner *scanner, TSLexer *lexer) {
 
     Tag tag = tag_for_name(tag_name);
     if (scanner->tags.size > 0 && tag_eq(array_back(&scanner->tags), &tag)) {
-        Tag popped_tag = array_pop(&scanner->tags);
-        tag_free(&popped_tag);
+        pop_tag(scanner);
         lexer->result_symbol = END_TAG_NAME;
     } else {
         lexer->result_symbol = ERRONEOUS_END_TAG_NAME;
@@ -278,8 +280,7 @@ static bool scan_self_closing_tag_delimiter(Scanner *scanner, TSLexer *lexer) {
     if (lexer->lookahead == '>') {
         advance(lexer);
         if (scanner->tags.size > 0) {
-            Tag popped_tag = array_pop(&scanner->tags);
-            tag_free(&popped_tag);
+            pop_tag(scanner);
             lexer->result_symbol = SELF_CLOSING_TAG_DELIMITER;
         }
         return true;
