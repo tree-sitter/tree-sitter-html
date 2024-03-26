@@ -1,5 +1,6 @@
 #include "tag.h"
-#include "tree_sitter/array.h"
+#include "tree_sitter/parser.h"
+
 #include <wctype.h>
 
 enum TokenType {
@@ -335,7 +336,7 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
 }
 
 void *tree_sitter_html_external_scanner_create() {
-    Scanner *scanner = (Scanner *)calloc(1, sizeof(Scanner));
+    Scanner *scanner = (Scanner *)ts_calloc(1, sizeof(Scanner));
     return scanner;
 }
 
@@ -360,5 +361,5 @@ void tree_sitter_html_external_scanner_destroy(void *payload) {
         tag_free(&scanner->tags.contents[i]);
     }
     array_delete(&scanner->tags);
-    free(scanner);
+    ts_free(scanner);
 }
