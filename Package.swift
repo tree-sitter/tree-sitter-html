@@ -1,5 +1,4 @@
 // swift-tools-version:5.3
-
 import PackageDescription
 
 let package = Package(
@@ -12,13 +11,27 @@ let package = Package(
         .target(name: "TreeSitterHTML",
                 path: ".",
                 exclude: [
-                    "binding.gyp",
-                    "bindings",
                     "Cargo.toml",
+                    "Makefile",
+                    "binding.gyp",
+                    "bindings/c",
+                    "bindings/go",
+                    "bindings/node",
+                    "bindings/python",
+                    "bindings/rust",
+                    "prebuilds",
                     "grammar.js",
-                    "LICENSE",
                     "package.json",
-                    "README.md",
+                    "package-lock.json",
+                    "pyproject.toml",
+                    "setup.py",
+                    "test",
+                    "examples",
+                    ".editorconfig",
+                    ".github",
+                    ".gitignore",
+                    ".gitattributes",
+                    ".gitmodules",
                 ],
                 sources: [
                     "src/parser.c",
@@ -29,5 +42,6 @@ let package = Package(
                 ],
                 publicHeadersPath: "bindings/swift",
                 cSettings: [.headerSearchPath("src")])
-    ]
+    ],
+    cLanguageStandard: .c11
 )
