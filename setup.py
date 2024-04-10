@@ -36,10 +36,10 @@ setup(
             sources=[
                 "bindings/python/tree_sitter_html/binding.c",
                 "src/parser.c",
-                # NOTE: if your language uses an external scanner, add it here.
+                "src/scanner.c",
             ],
             extra_compile_args=(
-                ["-std=c11"] if system() != 'Windows' else []
+                ["-std=c11"] if system() != "Windows" else ["/std:c11"]
             ),
             define_macros=[
                 ("Py_LIMITED_API", "0x03080000"),
