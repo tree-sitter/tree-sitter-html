@@ -2,38 +2,58 @@
   "name": "tree-sitter-html",
   "version": "0.20.2",
   "description": "HTML grammar for tree-sitter",
-  "main": "bindings/node",
-  "keywords": [
-    "parser",
-    "lexer"
-  ],
-  "homepage": "https://github.com/tree-sitter/tree-sitter-html",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tree-sitter/tree-sitter-html.git"
-  },
-  "bugs": {
-    "url": "https://github.com/tree-sitter/tree-sitter-html/issues"
-  },
-  "authors": [
-    "Max Brunsfeld <maxbrunsfeld@gmail.com>",
+  "repository": "github:tree-sitter/tree-sitter-html",
+  "license": "MIT",
+  "author": "Max Brunsfeld <maxbrunsfeld@gmail.com>",
+  "contributors": [
     "Ashi Krishnan <queerviolet@github.com>",
     "Amaan Qureshi <amaanq12@gmail.com>"
   ],
-  "license": "MIT",
+  "maintainers": [
+    "Amaan Qureshi <amaanq12@gmail.com>"
+  ],
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "keywords": [
+    "incremental",
+    "parsing",
+    "tree-sitter",
+    "html"
+  ],
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
+  ],
   "dependencies": {
-    "nan": "^2.18.0"
+    "node-addon-api": "^8.0.0",
+    "node-gyp-build": "^4.8.1"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.1"
+  },
+  "peerDependenciesMeta": {
+    "tree_sitter": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "eslint": "^8.50.0",
+    "eslint": "^8.57.0",
     "eslint-config-google": "^0.14.0",
-    "tree-sitter-cli": "^0.20.8"
+    "tree-sitter-cli": "^0.22.5",
+    "prebuildify": "^6.0.1"
   },
   "scripts": {
-    "build": "tree-sitter generate && node-gyp build",
+    "install": "node-gyp-build",
+    "prebuildify": "prebuildify --napi --strip",
+    "build": "tree-sitter generate --no-bindings",
+    "build-wasm": "tree-sitter build --wasm",
     "lint": "eslint grammar.js",
-    "test": "tree-sitter test && tree-sitter parse examples/*.html --quiet --time",
-    "test-windows": "tree-sitter test"
+    "parse": "tree-sitter parse",
+    "test": "tree-sitter test"
   },
   "tree-sitter": [
     {
@@ -42,15 +62,53 @@
         "html"
       ],
       "injection-regex": "html",
-      "highlights": [
-        "queries/highlights.scm"
-      ],
-      "injections": [
-        "queries/injections.scm"
-      ],
+      "highlights": "queries/highlights.scm",
+      "injections": "queries/injections.scm",
       "external-files": [
         "src/tag.h"
       ]
     }
-  ]
+  ],
+  "eslintConfig": {
+    "env": {
+      "commonjs": true,
+      "es2021": true
+    },
+    "extends": "google",
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "rules": {
+      "arrow-parens": "off",
+      "camel-case": "off",
+      "indent": [
+        "error",
+        2,
+        {
+          "SwitchCase": 1
+        }
+      ],
+      "max-len": [
+        "error",
+        {
+          "code": 160,
+          "ignoreComments": true,
+          "ignoreUrls": true,
+          "ignoreStrings": true
+        }
+      ],
+      "spaced-comment": [
+        "warn",
+        "always",
+        {
+          "line": {
+            "markers": [
+              "/"
+            ]
+          }
+        }
+      ]
+    }
+  }
 }

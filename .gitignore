@@ -1,13 +1,39 @@
-node_modules
-build
-*.log
-package-lock.json
-target
+# Rust artifacts
 Cargo.lock
-*.a
-*.dylib
-*.so
-*.o
-bindings/c/*.h
-bindings/c/*.pc
+target/
+
+# Node artifacts
+build/
+prebuilds/
+node_modules/
+*.tgz
+
+# Swift artifacts
 .build/
+Package.resolved
+
+# Go artifacts
+go.sum
+_obj/
+
+# Python artifacts
+.venv/
+dist/
+*.egg-info
+*.whl
+
+# C artifacts
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+*.pc
+
+# Example dirs
+/examples/*/
+
+# Grammar volatiles
+*.wasm
+*.obj
+*.o
