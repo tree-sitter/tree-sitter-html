@@ -13,9 +13,6 @@ enum TokenType {
     IMPLICIT_END_TAG,
     RAW_TEXT,
     COMMENT,
-    OMITTED_HTML_END_TAG,
-    OMITTED_HEAD_END_TAG,
-    OMITTED_BODY_END_TAG,
 };
 
 typedef struct {
