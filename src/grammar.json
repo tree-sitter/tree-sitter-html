@@ -342,17 +342,8 @@
                   "value": "="
                 },
                 {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "SYMBOL",
-                      "name": "attribute_value"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "quoted_attribute_value"
-                    }
-                  ]
+                  "type": "SYMBOL",
+                  "name": "_attribute_value"
                 }
               ]
             },
@@ -367,78 +358,64 @@
       "type": "PATTERN",
       "value": "[^<>\"'/=\\s]+"
     },
-    "attribute_value": {
-      "type": "PATTERN",
-      "value": "[^<>\"'=\\s]+"
-    },
     "entity": {
       "type": "PATTERN",
       "value": "&(#([xX][0-9a-fA-F]{1,6}|[0-9]{1,5})|[A-Za-z]{1,30});?"
     },
-    "quoted_attribute_value": {
+    "_attribute_value": {
       "type": "CHOICE",
       "members": [
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "'"
-            },
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "ALIAS",
-                  "content": {
-                    "type": "PATTERN",
-                    "value": "[^']+"
-                  },
-                  "named": true,
-                  "value": "attribute_value"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            },
-            {
-              "type": "STRING",
-              "value": "'"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "doublequoted_attribute_value"
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "\""
-            },
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "ALIAS",
-                  "content": {
-                    "type": "PATTERN",
-                    "value": "[^\"]+"
-                  },
-                  "named": true,
-                  "value": "attribute_value"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            },
-            {
-              "type": "STRING",
-              "value": "\""
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "singlequoted_attribute_value"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unquoted_attribute_value"
         }
       ]
+    },
+    "doublequoted_attribute_value": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\""
+        },
+        {
+          "type": "PATTERN",
+          "value": "[^\"]*"
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        }
+      ]
+    },
+    "singlequoted_attribute_value": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "'"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[^']*"
+        },
+        {
+          "type": "STRING",
+          "value": "'"
+        }
+      ]
+    },
+    "unquoted_attribute_value": {
+      "type": "PATTERN",
+      "value": "[^\"'>\\s][^>\\s]*"
     },
     "text": {
       "type": "PATTERN",
