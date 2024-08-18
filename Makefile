@@ -1,4 +1,4 @@
-VERSION := 0.20.3
+VERSION := 0.20.4
 
 LANGUAGE_NAME := tree-sitter-html
 
