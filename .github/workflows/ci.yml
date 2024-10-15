@@ -37,16 +37,12 @@ jobs:
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:
-          test-rust: ${{runner.os == 'Linux'}}
+          test-rust: true
+          test-node: true
+          test-python: true
+          test-go: true
+          test-swift: true
       - name: Parse examples
-        id: examples
-        continue-on-error: true
         uses: tree-sitter/parse-action@v4
         with:
-          files: examples/*.html
-      - name: Upload failure artifacts
-        uses: actions/upload-artifact@v4
-        if: steps.examples.outputs.failures != ''
-        with:
-          name: failures-${{matrix.os}}
-          path: ${{steps.examples.outputs.failures}}
+          files: examples/*
