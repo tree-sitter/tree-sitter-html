@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-html
-        VERSION "0.23.0"
+        VERSION "0.23.1"
         DESCRIPTION "HTML grammar for tree-sitter"
         HOMEPAGE_URL "https://github.com/tree-sitter/tree-sitter-html"
         LANGUAGES C)
