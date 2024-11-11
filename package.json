@@ -2,15 +2,27 @@
   "name": "tree-sitter-html",
   "version": "0.23.1",
   "description": "HTML grammar for tree-sitter",
-  "repository": "github:tree-sitter/tree-sitter-html",
+  "repository": "https://github.com/tree-sitter/tree-sitter-html",
   "license": "MIT",
-  "author": "Max Brunsfeld <maxbrunsfeld@gmail.com>",
+  "author": {
+    "name": "Max Brunsfeld",
+    "email": "maxbrunsfeld@gmail.com"
+  },
   "contributors": [
-    "Ashi Krishnan <queerviolet@github.com>",
-    "Amaan Qureshi <amaanq12@gmail.com>"
+    {
+      "name": "Ashi Krishnan",
+      "email": "queerviolet@github.com"
+    },
+    {
+      "name": "Amaan Qureshi",
+      "email": "amaanq12@gmail.com"
+    }
   ],
   "maintainers": [
-    "Amaan Qureshi <amaanq12@gmail.com>"
+    {
+      "name": "Amaan Qureshi",
+      "email": "amaanq12@gmail.com"
+    }
   ],
   "main": "bindings/node",
   "types": "bindings/node",
@@ -22,6 +34,7 @@
   ],
   "files": [
     "grammar.js",
+    "tree-sitter.json",
     "binding.gyp",
     "prebuilds/**",
     "bindings/node/*",
@@ -33,6 +46,12 @@
     "node-addon-api": "^8.2.2",
     "node-gyp-build": "^4.8.2"
   },
+  "devDependencies": {
+    "eslint": "^9.14.0",
+    "eslint-config-treesitter": "^1.0.2",
+    "tree-sitter-cli": "^0.24.4",
+    "prebuildify": "^6.0.1"
+  },
   "peerDependencies": {
     "tree-sitter": "^0.21.1"
   },
@@ -40,12 +59,6 @@
     "tree-sitter": {
       "optional": true
     }
-  },
-  "devDependencies": {
-    "eslint": "^9.14.0",
-    "eslint-config-treesitter": "^1.0.2",
-    "tree-sitter-cli": "^0.24.4",
-    "prebuildify": "^6.0.1"
   },
   "scripts": {
     "install": "node-gyp-build",
