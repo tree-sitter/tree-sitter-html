@@ -22,10 +22,11 @@ Tags with attributes
       (tag_name)
       (attribute
         (attribute_name)
-        (attribute_value))
+        (attribute_value
+          (attribute_value_fragment)))
       (attribute
         (attribute_name)
-        (quoted_attribute_value (attribute_value)))
+        (quoted_attribute_value (attribute_value_fragment)))
       (attribute
         (attribute_name)))
     (end_tag (tag_name))))
@@ -45,6 +46,7 @@ Nested tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element
       (start_tag (tag_name))
       (text)
@@ -69,13 +71,19 @@ Void tags
     (element
       (start_tag
         (tag_name)
-        (attribute (attribute_name) (quoted_attribute_value (attribute_value)))))
+        (attribute (attribute_name) (quoted_attribute_value (attribute_value_fragment)))))
     (element (start_tag (tag_name)))
     (element
       (self_closing_tag
         (tag_name)
-        (attribute (attribute_name) (attribute_value))
-        (attribute (attribute_name) (attribute_value))))
+        (attribute
+          (attribute_name)
+          (attribute_value
+            (attribute_value_fragment)))
+        (attribute
+          (attribute_name)
+          (attribute_value
+            (attribute_value_fragment)))))
     (end_tag (tag_name))))
 
 ==================================
@@ -88,7 +96,7 @@ Void tags at EOF
   (element
     (start_tag
       (tag_name)
-      (attribute (attribute_name) (quoted_attribute_value (attribute_value))))))
+      (attribute (attribute_name) (quoted_attribute_value (attribute_value_fragment))))))
 
 ==================================
 Custom tags
@@ -103,10 +111,12 @@ Custom tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element
       (start_tag (tag_name) (attribute (attribute_name)))
       (text)
       (end_tag (tag_name)))
+    (text)
     (end_tag (tag_name))))
 
 ==================================
@@ -122,9 +132,11 @@ Comments
 (document
   (comment)
   (comment)
+  (text)
   (element
     (start_tag (tag_name))
     (comment)
+    (text)
     (end_tag (tag_name))))
 
 ==================================
@@ -144,7 +156,6 @@ Raw text elements
 
 <script>
 </SCRIPT>
-
 ---
 
 (document
@@ -152,10 +163,12 @@ Raw text elements
     (start_tag (tag_name))
     (raw_text)
     (end_tag (tag_name)))
+  (text)
   (style_element
     (start_tag (tag_name))
     (raw_text)
     (end_tag (tag_name)))
+  (text)
   (script_element
     (start_tag (tag_name))
     (raw_text)
@@ -193,6 +206,7 @@ LI elements without close tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element (start_tag (tag_name)) (text))
     (element (start_tag (tag_name)) (text))
     (end_tag (tag_name))))
@@ -212,6 +226,7 @@ DT and DL elements without close tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element (start_tag (tag_name)) (text))
     (element (start_tag (tag_name)) (text))
     (element (start_tag (tag_name)) (text))
@@ -232,6 +247,7 @@ P elements without close tags
 (document
   (element (start_tag (tag_name)) (text))
   (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
+  (text)
   (element (start_tag (tag_name)) (text))
   (element (start_tag (tag_name)) (text))
   (element (start_tag (tag_name)) (text) (end_tag (tag_name))))
@@ -269,20 +285,27 @@ COLGROUP elements without end tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element
       (start_tag (tag_name))
+      (text)
       (element (start_tag
         (tag_name)
-        (attribute (attribute_name) (quoted_attribute_value (attribute_value)))))
+        (attribute (attribute_name) (quoted_attribute_value (attribute_value_fragment)))))
       (element (start_tag
         (tag_name)
-        (attribute (attribute_name) (quoted_attribute_value (attribute_value))))))
+        (attribute (attribute_name) (quoted_attribute_value (attribute_value_fragment))))))
     (element
       (start_tag (tag_name))
+      (text)
       (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
+      (text)
       (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
+      (text)
       (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
+      (text)
       (end_tag (tag_name)))
+    (text)
     (end_tag (tag_name))))
 
 =========================================
@@ -301,12 +324,15 @@ TR, TD, and TH elements without end tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element
       (start_tag (tag_name))
+      (text)
       (element (start_tag (tag_name)) (text))
       (element (start_tag (tag_name)) (text)))
     (element
       (start_tag (tag_name))
+      (text)
       (element (start_tag (tag_name)) (text))
       (element (start_tag (tag_name)) (text)))
     (end_tag (tag_name))))
@@ -314,7 +340,6 @@ TR, TD, and TH elements without end tags
 ==============================
 Named entities in tag contents
 ==============================
-
 <p>Lorem ipsum &nbsp; dolor sit &copy; amet.</p>
 ---
 
@@ -331,7 +356,6 @@ Named entities in tag contents
 ================================
 Numeric entities in tag contents
 ================================
-
 <p>Lorem ipsum &#160; dolor sit &#8212; amet.</p>
 ---
 
@@ -348,7 +372,6 @@ Numeric entities in tag contents
 =================================
 Multiple entities in tag contents
 =================================
-
 <p>Lorem ipsum &#xA0; dolor &#xa0; sit &nbsp; amet.</p>
 ---
 
@@ -367,9 +390,7 @@ Multiple entities in tag contents
 ==================================
 Omitted end tags for html and head
 ==================================
-
 <!doctype html><html><head>
-
 ---
 
 (document
@@ -380,3 +401,70 @@ Omitted end tags for html and head
     (element
       (start_tag
         (tag_name)))))
+
+
+==================================
+Fake comments in attribute values
+==================================
+<div title="<!-- Not a comment --> a <!-- Not a comment -->"/>
+<div title='<!-- Not a comment --> <!-- Not a comment -->'/>
+---
+
+(document
+  (element
+    (self_closing_tag
+      (tag_name)
+      (attribute
+        (attribute_name)
+        (quoted_attribute_value
+          (attribute_value_fragment)))))
+  (text)
+  (element
+    (self_closing_tag
+      (tag_name)
+      (attribute
+        (attribute_name)
+        (quoted_attribute_value
+          (attribute_value_fragment))))))
+
+==================================
+Entities in attribute values
+==================================
+<div title="&copy; &nbsp;&amp;"/>
+<div title='&copy; &nbsp;&amp;'/>
+<div title=&copy;&nbsp;_&amp;/>
+---
+
+(document
+  (element
+    (self_closing_tag
+      (tag_name)
+      (attribute
+        (attribute_name)
+        (quoted_attribute_value
+          (entity)
+          (attribute_value_fragment)
+          (entity)
+          (entity)))))
+  (text)
+  (element
+    (self_closing_tag
+      (tag_name)
+      (attribute
+        (attribute_name)
+        (quoted_attribute_value
+          (entity)
+          (attribute_value_fragment)
+          (entity)
+          (entity)))))
+  (text)
+  (element
+    (self_closing_tag
+      (tag_name)
+      (attribute
+        (attribute_name)
+        (attribute_value
+          (entity)
+          (entity)
+          (attribute_value_fragment)
+          (entity))))))
