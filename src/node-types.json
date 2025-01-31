@@ -23,6 +23,25 @@
     }
   },
   {
+    "type": "attribute_value",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute_value_fragment",
+          "named": true
+        },
+        {
+          "type": "entity",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "doctype",
     "named": true,
     "fields": {}
@@ -36,6 +55,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
         {
           "type": "doctype",
           "named": true
@@ -75,6 +98,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
         {
           "type": "doctype",
           "named": true
@@ -153,11 +180,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
-          "type": "attribute_value",
+          "type": "attribute_value_fragment",
+          "named": true
+        },
+        {
+          "type": "entity",
           "named": true
         }
       ]
@@ -284,7 +315,7 @@
     "named": true
   },
   {
-    "type": "attribute_value",
+    "type": "attribute_value_fragment",
     "named": true
   },
   {

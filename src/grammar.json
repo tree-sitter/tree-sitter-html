@@ -69,6 +69,10 @@
         {
           "type": "SYMBOL",
           "name": "erroneous_end_tag"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "comment"
         }
       ]
     },
@@ -366,15 +370,45 @@
     },
     "attribute_name": {
       "type": "PATTERN",
-      "value": "[^<>\"'/=\\s]+"
+      "value": "[^<>\"'/=\\s&]+"
+    },
+    "attribute_value_fragment": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[^<>\"'=\\s&]+"
+      }
     },
     "attribute_value": {
-      "type": "PATTERN",
-      "value": "[^<>\"'=\\s]+"
+      "type": "REPEAT1",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "attribute_value_fragment"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "entity"
+          }
+        ]
+      }
     },
     "entity": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "&(#([xX][0-9a-fA-F]{1,6}|[0-9]{1,5})|[A-Za-z]{1,30});?"
+      }
+    },
+    "unescaped_single_attribute_value_fragment": {
       "type": "PATTERN",
-      "value": "&(#([xX][0-9a-fA-F]{1,6}|[0-9]{1,5})|[A-Za-z]{1,30});?"
+      "value": "[^'&]+"
+    },
+    "unescaped_double_attribute_value_fragment": {
+      "type": "PATTERN",
+      "value": "[^\"&]+"
     },
     "quoted_attribute_value": {
       "type": "CHOICE",
@@ -387,21 +421,25 @@
               "value": "'"
             },
             {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "ALIAS",
-                  "content": {
-                    "type": "PATTERN",
-                    "value": "[^']+"
+              "type": "REPEAT",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "ALIAS",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "unescaped_single_attribute_value_fragment"
+                    },
+                    "named": true,
+                    "value": "attribute_value_fragment"
                   },
-                  "named": true,
-                  "value": "attribute_value"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
+                  {
+                    "type": "SYMBOL",
+                    "name": "entity"
+                  }
+                ]
+              }
             },
             {
               "type": "STRING",
@@ -417,21 +455,25 @@
               "value": "\""
             },
             {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "ALIAS",
-                  "content": {
-                    "type": "PATTERN",
-                    "value": "[^\"]+"
+              "type": "REPEAT",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "ALIAS",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "unescaped_double_attribute_value_fragment"
+                    },
+                    "named": true,
+                    "value": "attribute_value_fragment"
                   },
-                  "named": true,
-                  "value": "attribute_value"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
+                  {
+                    "type": "SYMBOL",
+                    "name": "entity"
+                  }
+                ]
+              }
             },
             {
               "type": "STRING",
@@ -443,14 +485,10 @@
     },
     "text": {
       "type": "PATTERN",
-      "value": "[^<>&\\s]([^<>&]*[^<>&\\s])?"
+      "value": "[^<>&]+"
     }
   },
   "extras": [
-    {
-      "type": "SYMBOL",
-      "name": "comment"
-    },
     {
       "type": "PATTERN",
       "value": "\\s+"
