@@ -370,7 +370,7 @@
     },
     "attribute_value": {
       "type": "PATTERN",
-      "value": "[^<>\"'=\\s]+"
+      "value": "[^<>\"'=\\s][^>\\s]*"
     },
     "entity": {
       "type": "PATTERN",
@@ -497,5 +497,6 @@
     }
   ],
   "inline": [],
-  "supertypes": []
+  "supertypes": [],
+  "reserved": {}
 }
