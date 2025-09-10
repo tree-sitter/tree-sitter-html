@@ -12,7 +12,6 @@ module.exports = grammar({
   name: 'html',
 
   extras: $ => [
-    $.comment,
     /\s+/,
   ],
 
@@ -48,6 +47,7 @@ module.exports = grammar({
       $.script_element,
       $.style_element,
       $.erroneous_end_tag,
+      $.comment,
     ),
 
     element: $ => choice(
@@ -122,20 +122,43 @@ module.exports = grammar({
       )),
     ),
 
-    attribute_name: _ => /[^<>"'/=\s]+/,
+    attribute_name: _ => /[^<>"'/=\s&]+/,
 
-    attribute_value: _ => /[^<>"'=\s]+/,
+    attribute_value_fragment: _ => token.immediate(/[^<>"'=\s&]+/),
+    attribute_value: $ => repeat1(
+      choice(
+        $.attribute_value_fragment,
+        $.entity,
+      )
+    ),
 
     // An entity can be named, numeric (decimal), or numeric (hexacecimal). The
     // longest entity name is 29 characters long, and the HTML spec says that
     // no more will ever be added.
-    entity: _ => /&(#([xX][0-9a-fA-F]{1,6}|[0-9]{1,5})|[A-Za-z]{1,30});?/,
+    entity: _ => token.immediate(/&(#([xX][0-9a-fA-F]{1,6}|[0-9]{1,5})|[A-Za-z]{1,30});?/),
+
+    unescaped_single_attribute_value_fragment: _ => /[^'&]+/,
+    unescaped_double_attribute_value_fragment: _ => /[^"&]+/,
 
     quoted_attribute_value: $ => choice(
-      seq('\'', optional(alias(/[^']+/, $.attribute_value)), '\''),
-      seq('"', optional(alias(/[^"]+/, $.attribute_value)), '"'),
+      seq(
+        '\'',
+        repeat(choice(
+          alias($.unescaped_single_attribute_value_fragment, $.attribute_value_fragment),
+          $.entity,
+        )),
+        '\''
+      ),
+      seq(
+        '"',
+        repeat(choice(
+          alias($.unescaped_double_attribute_value_fragment, $.attribute_value_fragment),
+          $.entity,
+        )),
+        '"'
+      ),
     ),
 
-    text: _ => /[^<>&\s]([^<>&]*[^<>&\s])?/,
+    text: _ => /[^<>&]+/,
   },
 });

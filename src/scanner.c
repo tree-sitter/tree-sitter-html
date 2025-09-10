@@ -300,7 +300,7 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
             lexer->mark_end(lexer);
             advance(lexer);
 
-            if (lexer->lookahead == '!') {
+            if (valid_symbols[COMMENT] && lexer->lookahead == '!') {
                 advance(lexer);
                 return scan_comment(lexer);
             }
