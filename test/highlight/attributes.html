@@ -15,20 +15,19 @@
   <!--                             ^^^ tag -->
   <div onclick="tap">Hello, World</div>
   <!--                                ^ punctuation.bracket -->
-  <something:different
+  <something:different @click="count++" :value="count">
   <!-- <- punctuation.bracket -->
   <!-- ^^^^^^^^^^^^^^^ tag -->
-    @click="count++"
-<!--^^^^^^^ attribute -->
-<!--        ^^^^^^^ string -->
-    :value="count"
-<!--^^^^^^^ attribute -->
-<!--        ^^^^^ string -->
-    @value:modelValue="newValue => count = newValue"
-<!--^^^^^^^^^^^^^^^^^^ attribute -->
-<!--                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ string -->
-  >
-  <!-- <- punctuation.bracket -->
+  <!--                 ^^^^^^^ attribute -->
+  <!--                         ^^^^^^^ string -->
+  <!--                                  ^^^^^^^ attribute -->
+  <!--                                          ^^^^^ string -->
+  <!--                                                ^ punctuation.bracket -->
+
+    <div @value:modelValue="newValue => count = newValue"></div>
+    <!-- ^^^^^^^^^^^^^^^^^^ attribute -->
+    <!--                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ string -->
+
   </something:different>
   <!-- <- punctuation.bracket -->
   <!-- ^^^^^^^^^^^^^^^^ tag -->
