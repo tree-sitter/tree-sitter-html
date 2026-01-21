@@ -1,0 +1,44 @@
+version: 2.1
+
+orbs:
+  ktl-nexus: krakentech/ktl-nexus@4.0.0
+
+jobs:
+  publish:
+    docker:
+      # CRITICAL: Keep 3.14+.
+      # tree-sitter-cli (v0.25+) requires GLIBC_2.39.
+      # cimg/python:3.13 (and older) use Ubuntu 22.04 (GLIBC_2.35).
+      # cimg/python:3.14 uses Ubuntu 24.04 (GLIBC_2.39).
+      - image: cimg/python:3.14-node
+    resource_class: small
+    steps:
+      - checkout
+      - ktl-nexus/login
+      - ktl-nexus/configure_uv
+      - run:
+          name: Install Tree-sitter CLI
+          command: npm install -g tree-sitter-cli@0.26.3
+      - run:
+          name: Generate grammar
+          command: tree-sitter generate
+      - run:
+          name: Test the grammar
+          command: tree-sitter test
+      - run:
+          name: Build package
+          command: uv build
+      - run:
+          name: Publish package
+          command: uv publish
+
+workflows:
+  publish-to-nexus:
+    jobs:
+      - publish:
+          context:
+            - KTL_NEXUS
+          filters:
+            branches:
+              only:
+                - master
