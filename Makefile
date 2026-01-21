@@ -10,6 +10,7 @@ VERSION := 0.23.2
 SRC_DIR := src
 
 TS ?= tree-sitter
+TREE_SITTER_ABI_VERSION ?= 15
 
 # install directory layout
 PREFIX ?= /usr/local
@@ -65,8 +66,8 @@ $(LANGUAGE_NAME).pc: bindings/c/$(LANGUAGE_NAME).pc.in
 		-e 's|@PROJECT_HOMEPAGE_URL@|$(HOMEPAGE_URL)|' \
 		-e 's|@CMAKE_INSTALL_PREFIX@|$(PREFIX)|' $< > $@
 
-$(PARSER): $(SRC_DIR)/grammar.json
-	$(TS) generate $^
+$(PARSER): grammar.js
+	$(TS) generate --abi $(TREE_SITTER_ABI_VERSION)
 
 install: all
 	install -d '$(DESTDIR)$(INCLUDEDIR)'/tree_sitter '$(DESTDIR)$(PCLIBDIR)' '$(DESTDIR)$(LIBDIR)'

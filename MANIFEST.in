@@ -1,0 +1,5 @@
+include grammar.js
+include tree-sitter.json
+include src/scanner.c
+include src/tag.h
+recursive-include queries *.scm

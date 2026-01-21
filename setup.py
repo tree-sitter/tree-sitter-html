@@ -1,5 +1,8 @@
+# Builds the Python binding by compiling C sources into a Python extension module.
+
 from os.path import isdir, join
 from platform import system
+from subprocess import check_call
 
 from setuptools import Extension, find_packages, setup
 from setuptools.command.build import build
@@ -8,6 +11,8 @@ from wheel.bdist_wheel import bdist_wheel
 
 class Build(build):
     def run(self):
+        # Generate parser from grammar.js (same logic and rationale as build.rs)
+        check_call(["tree-sitter", "generate", "--abi", "15"])
         if isdir("queries"):
             dest = join(self.build_lib, "tree_sitter_html", "queries")
             self.copy_tree("queries", dest)

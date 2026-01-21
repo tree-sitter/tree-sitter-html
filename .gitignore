@@ -14,9 +14,12 @@ _obj/
 
 # Python artifacts
 .venv/
+__pycache__/
+.pytest_cache/
 dist/
 *.egg-info
 *.whl
+uv.lock
 
 # C artifacts
 *.a
@@ -33,8 +36,16 @@ dist/
 *.wasm
 *.obj
 *.o
+src/grammar.json
+src/node-types.json
+src/parser.c
+src/grammar-source-map.json
+src/parser-tables.json
+src/tree_sitter/
 
 # Archives
 *.tar.gz
 *.tgz
 *.zip
+
+.DS_Store
