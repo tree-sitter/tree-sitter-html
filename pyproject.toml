@@ -3,31 +3,30 @@ requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tree-sitter-html"
-description = "HTML grammar for tree-sitter"
-version = "0.23.2"
-keywords = ["incremental", "parsing", "tree-sitter", "html"]
+name = "tree-sitter-htmldjango"
+description = "HTML + Django template grammar for tree-sitter"
+version = "0.2.1"
+keywords = ["incremental", "parsing", "tree-sitter", "html", "django", "template"]
 classifiers = [
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Topic :: Software Development :: Compilers",
   "Topic :: Text Processing :: Linguistic",
   "Typing :: Typed",
 ]
 authors = [
-  { name = "Max Brunsfeld", email = "maxbrunsfeld@gmail.com" },
-  { name = "Amaan Qureshi", email = "amaanq12@gmail.com" },
+  { name = "octoenergy" },
 ]
-requires-python = ">=3.9"
-license.text = "MIT"
+requires-python = ">=3.12"
+license = "MIT"
 readme = "README.md"
+dependencies = ["tree-sitter~=0.25.2"]
 
 [project.urls]
-Homepage = "https://github.com/tree-sitter/tree-sitter-html"
+Homepage = "https://github.com/octoenergy/tree-sitter-htmldjango"
 
 [project.optional-dependencies]
 core = ["tree-sitter~=0.22"]
 
 [tool.cibuildwheel]
-build = "cp39-*"
+build = "cp312-*"
 build-frontend = "build"

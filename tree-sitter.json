@@ -1,37 +1,35 @@
 {
   "grammars": [
     {
-      "name": "html",
-      "camelcase": "HTML",
-      "scope": "source.html",
+      "name": "htmldjango",
+      "camelcase": "HTMLDjango",
+      "scope": "text.html.django",
       "path": ".",
       "external-files": [
         "src/tag.h"
       ],
       "file-types": [
-        "html"
+        "html",
+        "htm",
+        "django",
+        "htmldjango"
       ],
       "highlights": "queries/highlights.scm",
       "injections": "queries/injections.scm",
-      "injection-regex": "html"
+      "injection-regex": "^(html|htmldjango|django)$"
     }
   ],
   "metadata": {
-    "version": "0.23.2",
+    "version": "0.2.1",
     "license": "MIT",
-    "description": "HTML grammar for tree-sitter",
+    "description": "HTML + Django template grammar for tree-sitter",
     "authors": [
       {
-        "name": "Max Brunsfeld",
-        "email": "maxbrunsfeld@gmail.com"
-      },
-      {
-        "name": "Amaan Qureshi",
-        "email": "amaanq12@gmail.com"
+        "name": "octoenergy"
       }
     ],
     "links": {
-      "repository": "https://github.com/tree-sitter/tree-sitter-html"
+      "repository": "https://github.com/octoenergy/tree-sitter-htmldjango"
     }
   },
   "bindings": {

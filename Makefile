@@ -2,9 +2,9 @@ ifeq ($(OS),Windows_NT)
 $(error Windows is not supported)
 endif
 
-LANGUAGE_NAME := tree-sitter-html
-HOMEPAGE_URL := https://github.com/tree-sitter/tree-sitter-html
-VERSION := 0.23.2
+LANGUAGE_NAME := tree-sitter-htmldjango
+HOMEPAGE_URL := https://github.com/octoenergy/tree-sitter-htmldjango
+VERSION := 0.2.1
 
 # repository
 SRC_DIR := src

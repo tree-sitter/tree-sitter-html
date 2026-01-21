@@ -1,6 +1,14 @@
-"""HTML grammar for tree-sitter"""
+"""HTML + Django template grammar for tree-sitter"""
+
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as _version
 
 from importlib.resources import files as _files
+
+try:
+    __version__ = _version("tree-sitter-htmldjango")
+except PackageNotFoundError:
+    __version__ = "0.0.0"  # Not installed (running from source)
 
 from ._binding import language
 
@@ -21,6 +29,7 @@ def __getattr__(name):
 
 
 __all__ = [
+    "__version__",
     "language",
     "HIGHLIGHTS_QUERY",
     "INJECTIONS_QUERY",

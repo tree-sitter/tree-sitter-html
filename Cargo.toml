@@ -1,16 +1,13 @@
 [package]
-name = "tree-sitter-html"
-description = "HTML grammar for tree-sitter"
-version = "0.23.2"
-authors = [
-  "Max Brunsfeld <maxbrunsfeld@gmail.com>",
-  "Amaan Qureshi <amaanq12@gmail.com>",
-]
+name = "tree-sitter-htmldjango"
+description = "HTML + Django template grammar for tree-sitter"
+version = "0.2.1"
+authors = ["octoenergy"]
 license = "MIT"
 readme = "README.md"
-keywords = ["incremental", "parsing", "tree-sitter", "html"]
+keywords = ["incremental", "parsing", "tree-sitter", "html", "django"]
 categories = ["parsing", "text-editors"]
-repository = "https://github.com/tree-sitter/tree-sitter-html"
+repository = "https://github.com/octoenergy/tree-sitter-htmldjango"
 edition = "2021"
 autoexamples = false
 
@@ -27,4 +24,4 @@ tree-sitter-language = "0.1"
 cc = "1.1"
 
 [dev-dependencies]
-tree-sitter = "0.24"
+tree-sitter = "0.25"

@@ -332,27 +332,27 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
     return false;
 }
 
-void *tree_sitter_html_external_scanner_create() {
+void *tree_sitter_htmldjango_external_scanner_create() {
     Scanner *scanner = (Scanner *)ts_calloc(1, sizeof(Scanner));
     return scanner;
 }
 
-bool tree_sitter_html_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
+bool tree_sitter_htmldjango_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
     Scanner *scanner = (Scanner *)payload;
     return scan(scanner, lexer, valid_symbols);
 }
 
-unsigned tree_sitter_html_external_scanner_serialize(void *payload, char *buffer) {
+unsigned tree_sitter_htmldjango_external_scanner_serialize(void *payload, char *buffer) {
     Scanner *scanner = (Scanner *)payload;
     return serialize(scanner, buffer);
 }
 
-void tree_sitter_html_external_scanner_deserialize(void *payload, const char *buffer, unsigned length) {
+void tree_sitter_htmldjango_external_scanner_deserialize(void *payload, const char *buffer, unsigned length) {
     Scanner *scanner = (Scanner *)payload;
     deserialize(scanner, buffer, length);
 }
 
-void tree_sitter_html_external_scanner_destroy(void *payload) {
+void tree_sitter_htmldjango_external_scanner_destroy(void *payload) {
     Scanner *scanner = (Scanner *)payload;
     for (unsigned i = 0; i < scanner->tags.size; i++) {
         tag_free(&scanner->tags.contents[i]);

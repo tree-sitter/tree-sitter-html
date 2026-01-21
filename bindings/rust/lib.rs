@@ -1,4 +1,4 @@
-//! This crate provides HTML language support for the [tree-sitter][] parsing library.
+//! This crate provides HTML + Django template language support for the [tree-sitter][] parsing library.
 //!
 //! Typically, you will use the [LANGUAGE][] constant to add this language to a
 //! tree-sitter [Parser][], and then use the parser to parse some code:
@@ -7,10 +7,10 @@
 //! let code = r#"
 //! "#;
 //! let mut parser = tree_sitter::Parser::new();
-//! let language = tree_sitter_html::LANGUAGE;
+//! let language = tree_sitter_htmldjango::LANGUAGE;
 //! parser
 //!     .set_language(&language.into())
-//!     .expect("Error loading HTML parser");
+//!     .expect("Error loading HTMLDjango parser");
 //! let tree = parser.parse(code, None).unwrap();
 //! assert!(!tree.root_node().has_error());
 //! ```
@@ -21,13 +21,13 @@
 use tree_sitter_language::LanguageFn;
 
 extern "C" {
-    fn tree_sitter_html() -> *const ();
+    fn tree_sitter_htmldjango() -> *const ();
 }
 
 /// The tree-sitter [`LanguageFn`][LanguageFn] for this grammar.
 ///
 /// [LanguageFn]: https://docs.rs/tree-sitter-language/*/tree_sitter_language/struct.LanguageFn.html
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_html) };
+pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_htmldjango) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
@@ -47,6 +47,6 @@ mod tests {
         let mut parser = tree_sitter::Parser::new();
         parser
             .set_language(&super::LANGUAGE.into())
-            .expect("Error loading HTML parser");
+            .expect("Error loading HTMLDjango parser");
     }
 }

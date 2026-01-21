@@ -1,34 +1,19 @@
 {
-  "name": "tree-sitter-html",
-  "version": "0.23.2",
-  "description": "HTML grammar for tree-sitter",
-  "repository": "https://github.com/tree-sitter/tree-sitter-html",
+  "name": "tree-sitter-htmldjango",
+  "version": "0.2.1",
+  "description": "HTML + Django template grammar for tree-sitter",
+  "repository": "https://github.com/octoenergy/tree-sitter-htmldjango",
   "license": "MIT",
   "author": {
-    "name": "Max Brunsfeld",
-    "email": "maxbrunsfeld@gmail.com"
+    "name": "octoenergy"
   },
-  "contributors": [
-    {
-      "name": "Ashi Krishnan",
-      "email": "queerviolet@github.com"
-    },
-    {
-      "name": "Amaan Qureshi",
-      "email": "amaanq12@gmail.com"
-    }
-  ],
-  "maintainers": [
-    {
-      "name": "Amaan Qureshi",
-      "email": "amaanq12@gmail.com"
-    }
-  ],
   "keywords": [
     "incremental",
     "parsing",
     "tree-sitter",
-    "html"
+    "html",
+    "django",
+    "template"
   ],
   "files": [
     "grammar.js",
@@ -38,9 +23,9 @@
     "*.wasm"
   ],
   "devDependencies": {
-    "eslint": "^9.14.0",
-    "eslint-config-treesitter": "^1.0.2",
-    "tree-sitter-cli": "^0.24.4"
+    "eslint": "9.39.2",
+    "eslint-config-treesitter": "1.0.2",
+    "tree-sitter-cli": "0.26.3"
   },
   "scripts": {
     "lint": "eslint grammar.js",

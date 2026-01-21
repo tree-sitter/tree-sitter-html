@@ -30,5 +30,5 @@ fn main() {
 
     c_config.file("src/parser.c");
     c_config.file("src/scanner.c");
-    c_config.compile("tree-sitter-html");
+    c_config.compile("tree-sitter-htmldjango");
 }

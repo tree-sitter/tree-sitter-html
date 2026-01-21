@@ -9,7 +9,7 @@
 // @ts-check
 
 module.exports = grammar({
-  name: 'html',
+  name: 'htmldjango',
 
   extras: $ => [
     $.comment,
