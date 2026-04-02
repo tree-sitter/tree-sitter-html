@@ -295,10 +295,31 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
         skip(lexer);
     }
 
+    // Close void elements when followed by text or other non-tag content.
+    // The '<' case handles element/comment siblings separately below.
+    if (lexer->lookahead != '<' && lexer->lookahead != '\0' &&
+        valid_symbols[IMPLICIT_END_TAG] && !valid_symbols[SELF_CLOSING_TAG_DELIMITER]) {
+        Tag *parent = scanner->tags.size == 0 ? NULL : array_back(&scanner->tags);
+        if (parent && tag_is_void(parent)) {
+            return scan_implicit_end_tag(scanner, lexer);
+        }
+    }
+
     switch (lexer->lookahead) {
         case '<':
             lexer->mark_end(lexer);
             advance(lexer);
+
+            // Close void elements before scanning comments or child elements,
+            // so that subsequent nodes become siblings, not children.
+            // Skip this when the next char is '/' (closing tag like </input>),
+            // since explicit end tags for void elements should still be accepted.
+            if (valid_symbols[IMPLICIT_END_TAG] && lexer->lookahead != '/') {
+                Tag *parent = scanner->tags.size == 0 ? NULL : array_back(&scanner->tags);
+                if (parent && tag_is_void(parent)) {
+                    return scan_implicit_end_tag(scanner, lexer);
+                }
+            }
 
             if (lexer->lookahead == '!') {
                 advance(lexer);

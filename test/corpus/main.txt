@@ -91,6 +91,159 @@ Void tags at EOF
       (attribute (attribute_name) (quoted_attribute_value (attribute_value))))))
 
 ==================================
+Void tags with comments
+==================================
+<input type="text">
+<!-- a comment -->
+<div>hello</div>
+---
+
+(document
+  (element
+    (start_tag
+      (tag_name)
+      (attribute (attribute_name) (quoted_attribute_value (attribute_value)))))
+  (comment)
+  (element
+    (start_tag (tag_name))
+    (text)
+    (end_tag (tag_name))))
+
+==================================
+Void tags with text
+==================================
+<img src="foo.png">
+some text
+<br>
+more text
+---
+
+(document
+  (element
+    (start_tag
+      (tag_name)
+      (attribute (attribute_name) (quoted_attribute_value (attribute_value)))))
+  (text)
+  (element
+    (start_tag (tag_name)))
+  (text))
+
+==================================
+Void tags with sibling elements
+==================================
+<hr>
+<p>text</p>
+---
+
+(document
+  (element
+    (start_tag (tag_name)))
+  (element
+    (start_tag (tag_name))
+    (text)
+    (end_tag (tag_name))))
+
+==================================
+Consecutive void elements
+==================================
+<br><br><br>
+---
+
+(document
+  (element
+    (start_tag (tag_name)))
+  (element
+    (start_tag (tag_name)))
+  (element
+    (start_tag (tag_name))))
+
+==================================
+Void element followed by raw text element
+==================================
+<input><script>var x = 1;</script>
+---
+
+(document
+  (element
+    (start_tag (tag_name)))
+  (script_element
+    (start_tag (tag_name))
+    (raw_text)
+    (end_tag (tag_name))))
+
+==================================
+Void element inside implicit-close context
+==================================
+<p><br>text<p>second
+---
+
+(document
+  (element
+    (start_tag (tag_name))
+    (element
+      (start_tag (tag_name)))
+    (text))
+  (element
+    (start_tag (tag_name))
+    (text)
+    (MISSING _implicit_end_tag)))
+
+==================================
+Void element followed by entity
+==================================
+<br>&amp;
+---
+
+(document
+  (element
+    (start_tag (tag_name)))
+  (entity))
+
+==================================
+Void elements in head
+==================================
+<head><meta charset="utf-8"><title>T</title></head>
+---
+
+(document
+  (element
+    (start_tag (tag_name))
+    (element
+      (start_tag
+        (tag_name)
+        (attribute (attribute_name) (quoted_attribute_value (attribute_value)))))
+    (element
+      (start_tag (tag_name))
+      (text)
+      (end_tag (tag_name)))
+    (end_tag (tag_name))))
+
+==================================
+Void element with explicit close then comment
+==================================
+<input></input><!-- c -->
+---
+
+(document
+  (element
+    (start_tag (tag_name))
+    (end_tag (tag_name)))
+  (comment))
+
+==================================
+Void element at end of parent
+==================================
+<div><br></div>
+---
+
+(document
+  (element
+    (start_tag (tag_name))
+    (element
+      (start_tag (tag_name)))
+    (end_tag (tag_name))))
+
+==================================
 Custom tags
 ==================================
 <something:different>
