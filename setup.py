@@ -29,6 +29,9 @@ setup(
         "tree_sitter_html": ["*.pyi", "py.typed"],
         "tree_sitter_html.queries": ["*.scm"],
     },
+    exclude_package_data={
+        "tree_sitter_html": ["*.c"],
+    },
     ext_package="tree_sitter_html",
     ext_modules=[
         Extension(
